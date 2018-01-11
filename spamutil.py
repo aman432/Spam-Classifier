@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn import preprocessing, cross_validation, neighbors
+
 def sigmoid(Z):
     A = 1/(1+np.exp(-Z))
     cache = Z
@@ -40,16 +41,21 @@ def sigmoid_backward(dA, cache):
 def load_data():
     train_dataset = pd.read_csv('data/spambase.data')
     train_dataset.replace('?', -1, inplace=True)
+    
     X = np.array(train_dataset.drop(['class'], 1),dtype=np.int64)
     X = X*100
     X = preprocessing.scale(X)
     Y = np.array(train_dataset['class'],dtype=np.int64)
+    
     train_set_x_orig,test_set_x_orig,train_set_y_orig,test_set_y_orig = cross_validation.train_test_split(X,Y, test_size=0.2)
-    classes = np.array([1,0]) # the list of classes
-
+    classes = np.array([1,0]) 
+    
     train_set_y_orig = train_set_y_orig.reshape((1, train_set_y_orig.shape[0]))
     test_set_y_orig = test_set_y_orig.reshape((1, test_set_y_orig.shape[0]))
+    
     return train_set_x_orig, train_set_y_orig, test_set_x_orig, test_set_y_orig, classes
+
+
 def initialize_parameters(n_x, n_h, n_y):
     np.random.seed(1)
 
